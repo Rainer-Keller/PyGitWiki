@@ -46,7 +46,7 @@ class HTTPServer_RequestHandler(BaseHTTPRequestHandler):
         return self.repo.git.show("HEAD:" + path, stdout_as_string=False)
 
     def renderHTML(self, contents):
-        return markdown.markdown(contents.decode('utf8')).encode('utf8')
+        return markdown.markdown(contents.decode('utf8'))
 
     def initRepo(self):
         if not self.repo:
@@ -113,7 +113,7 @@ class HTTPServer_RequestHandler(BaseHTTPRequestHandler):
             if editRequest:
                 text = (editTemplate % (TITLE, pageControls, path, text.decode('utf8'))).encode('utf8')
             else:
-                text = (pageTemplate % (TITLE, pageControls, self.renderHTML(text).decode('utf8'))).encode('utf8')
+                text = (pageTemplate % (TITLE, pageControls, self.renderHTML(text))).encode('utf8')
 
             contentType == 'text/html'
 
