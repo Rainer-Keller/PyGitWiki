@@ -1,9 +1,26 @@
 Python Git Wiki
 ================
 
-It can serve repositories with working copy and bare ones.
+This is a lightweight Wiki using a Git storage backend
+for personal use. Edits can be done by regular Git tools or
+by browser.
 
-The Pyhton packages
+The main purpose is for personal use on your local machine. The code
+is *NOT* secured against all kinds of attacks. **Don't use it on public servers.**
+
+### Setup
+
+1. Install the python packages
+
   * GitPython
   * Markdown
-need to be installed.
+
+2. Create a git repostitory for storing your content.
+
+3. Create file `wiki.conf` based on `wiki.conf.example` by setting a title and
+   path to the repository to use.
+
+4. Start the server
+
+  `./main.py`
+
