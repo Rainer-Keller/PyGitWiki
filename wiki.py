@@ -8,9 +8,6 @@ import configparser
 import os
 from urllib.parse import urlparse
 
-REPO = None
-TITLE = None
-
 class HTTPServer_RequestHandler(BaseHTTPRequestHandler):
     repo = None
 
@@ -22,7 +19,7 @@ class HTTPServer_RequestHandler(BaseHTTPRequestHandler):
 
     def initRepo(self):
         if not self.repo:
-            self.repo = git.Repo(REPO)
+            self.repo = git.Repo(config.get('Wiki', 'Repository'))
 
     def searchRepo(self, expression):
         result = []
@@ -47,7 +44,7 @@ class HTTPServer_RequestHandler(BaseHTTPRequestHandler):
 
         content = self.rfile.read(int(self.headers['Content-Length']))
 
-        with open(REPO + "/" + path, "wb") as f:
+        with open(config.get('Wiki', 'Repository') + "/" + path, "wb") as f:
             f.write(content)
 
         self.repo.index.add([path])
@@ -78,7 +75,7 @@ class HTTPServer_RequestHandler(BaseHTTPRequestHandler):
                 contentType == 'text/html'
                 with open('wiki.html', 'r') as f:
                     template = f.read()
-                    template = template.replace("@TITLE@", TITLE)
+                    template = template.replace("@TITLE@", config.get('Wiki', 'Title'))
                     html = self.renderHTML(text)
                     if self.repo.bare:
                         html = '<script>document.getElementById("editButton").classList.add("hidden")</script>' + html
@@ -93,12 +90,11 @@ class HTTPServer_RequestHandler(BaseHTTPRequestHandler):
 
 config = configparser.ConfigParser()
 config.read('wiki.conf')
-REPO = config.get('Wiki', 'Repository')
-TITLE = config.get('Wiki', 'Title')
-assert(os.path.exists(REPO))
-print("Using repository at", REPO)
 
-server_address = ('127.0.0.1', 8080)
-httpd = HTTPServer(server_address, HTTPServer_RequestHandler)
-print('running server...')
+repo = config.get('Wiki', 'Repository')
+assert(os.path.exists(repo))
+print("Using repository at", repo)
+
+httpd = HTTPServer(('127.0.0.1', 8080), HTTPServer_RequestHandler)
+print('Running server...')
 httpd.serve_forever()

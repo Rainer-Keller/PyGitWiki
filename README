@@ -6,7 +6,7 @@ for personal use. Edits can be done by regular Git tools or
 by browser.
 
 The main purpose is for personal use on your local machine. The code
-is *NOT* secured against all kinds of attacks. **Don't use it on public servers.**
+is *NOT* secured against all kinds of attacks. **Do not use it on public servers.**
 
 ### Setup
 
@@ -22,5 +22,5 @@ is *NOT* secured against all kinds of attacks. **Don't use it on public servers.
 
 4. Start the server
 
-  `./main.py`
+  `./wiki.py`
 
