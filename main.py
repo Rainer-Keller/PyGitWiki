@@ -18,7 +18,7 @@ class HTTPServer_RequestHandler(BaseHTTPRequestHandler):
         return self.repo.git.show("HEAD:" + path, stdout_as_string=False)
 
     def renderHTML(self, contents):
-        return markdown.markdown(contents.decode('utf8'))
+        return markdown.markdown(contents.decode('utf8'), extensions=['markdown.extensions.tables', 'markdown.extensions.toc'])
 
     def initRepo(self):
         if not self.repo:
