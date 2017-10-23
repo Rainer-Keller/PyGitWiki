@@ -104,12 +104,8 @@ class HTTPServer_RequestHandler(BaseHTTPRequestHandler):
             print(e)
             return
 
-        contentType = 'markdown' # default
-        filetype = path[path.rfind('.'):]
-        if filetype in mimetypes.types_map:
-            contentType = mimetypes.types_map[filetype]
-
-        if contentType == 'markdown':
+        contentType, encoding = mimetypes.guess_type(path)
+        if not contentType:
             if editRequest:
                 text = (editTemplate % (TITLE, pageControls, path, text.decode('utf8'))).encode('utf8')
             else:
@@ -122,8 +118,6 @@ class HTTPServer_RequestHandler(BaseHTTPRequestHandler):
         self.end_headers()
         self.wfile.write(text)
         return
-
-mimetypes.init()
 
 config = configparser.ConfigParser()
 config.read('wiki.conf')
