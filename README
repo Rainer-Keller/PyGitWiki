@@ -1,0 +1,9 @@
+Python Git Wiki
+================
+
+It can serve repositories with working copy and bare ones.
+
+The Pyhton packages
+  * GitPython
+  * Markdown
+need to be installed.
