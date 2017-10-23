@@ -52,6 +52,16 @@ class HTTPServer_RequestHandler(BaseHTTPRequestHandler):
         if not self.repo:
             self.repo = git.Repo(REPO)
 
+    def searchRepo(self, expression):
+        result = []
+        self.initRepo()
+        for line in self.repo.git.grep([expression, 'HEAD']).split('\n'):
+            line = line[line.find(':')+1:] # strip HEAD:
+            filename = line[:line.find(':')]
+            text = line[line.find(':')+1:]
+            result.append({'filename': filename, 'text': text})
+        return result
+
     def do_POST(self):
         self.initRepo()
 
