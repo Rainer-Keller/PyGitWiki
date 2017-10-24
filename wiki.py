@@ -71,7 +71,10 @@ class HTTPServer_RequestHandler(BaseHTTPRequestHandler):
 
             self.repo.index.add([path])
             gitUser = git.Actor(config.get("Git", "User.Name", fallback="Wiki"), config.get("Git", "User.Email", fallback="wiki@localhost"))
-            self.repo.index.commit("Commit message", author=gitUser, committer=gitUser)
+            commitMessage = form.getvalue('commitMessage')
+            if not commitMessage:
+                commitMessage = "No commit message"
+            self.repo.index.commit(commitMessage, author=gitUser, committer=gitUser)
         except Exception as e:
             print(e)
             self.send_response(403)
