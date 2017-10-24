@@ -21,6 +21,15 @@ class HTTPServer_RequestHandler(BaseHTTPRequestHandler):
         if not self.repo:
             self.repo = git.Repo(config.get('Wiki', 'Repository'))
 
+    def validatedPath(self):
+        url = urlparse(self.path)
+        path = url.path[1:]
+
+        if len(path) == 0:
+            path = config.get("Wiki", "DefaultPage")
+
+        return (url, path)
+
     def searchRepo(self, expression):
         result = []
         self.initRepo()
@@ -34,8 +43,7 @@ class HTTPServer_RequestHandler(BaseHTTPRequestHandler):
     def do_POST(self):
         self.initRepo()
 
-        url = urlparse(self.path)
-        path = url.path[1:]
+        url, path = self.validatedPath()
 
         if self.repo.bare or url.query != "commit":
             self.send_response(403)
@@ -56,8 +64,7 @@ class HTTPServer_RequestHandler(BaseHTTPRequestHandler):
     def do_GET(self):
         self.initRepo()
 
-        url = urlparse(self.path)
-        path = url.path[1:]
+        url, path = self.validatedPath()
 
         try:
             text = self.getContentsFromGit(path)
