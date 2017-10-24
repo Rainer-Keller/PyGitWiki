@@ -49,8 +49,8 @@ class HTTPServer_RequestHandler(BaseHTTPRequestHandler):
 
         self.repo.index.add([path])
         self.repo.index.commit("Commit message", author=git.Actor("Author name", "author@example.com"), committer=git.Actor("Committer name", "committer@example.com"))
-
-        self.do_GET()
+        self.send_response(200)
+        self.end_headers()
         return
 
     def do_GET(self):
