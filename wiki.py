@@ -26,7 +26,7 @@ class HTTPServer_RequestHandler(BaseHTTPRequestHandler):
         path = url.path[1:]
 
         if len(path) == 0:
-            path = config.get("Wiki", "DefaultPage")
+            path = config.get("Wiki", "DefaultPage", fallback="index.md")
 
         return (url, path)
 
@@ -82,7 +82,7 @@ class HTTPServer_RequestHandler(BaseHTTPRequestHandler):
                 contentType == 'text/html'
                 with open('wiki.html', 'r') as f:
                     template = f.read()
-                    template = template.replace("@TITLE@", config.get('Wiki', 'Title'))
+                    template = template.replace("@TITLE@", config.get('Wiki', 'Title', fallback="<no title>"))
                     html = self.renderHTML(text)
                     if self.repo.bare:
                         html = '<script>document.getElementById("editButton").classList.add("hidden")</script>' + html
