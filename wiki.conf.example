@@ -1,3 +1,7 @@
 [Wiki]
 Title = My Wiki
 Repository = /path/to/repository
+
+# You can get an example stylesheet from markdowncss.github.io
+Stylesheet = myStylesheet.css
+
