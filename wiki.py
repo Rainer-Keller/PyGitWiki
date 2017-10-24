@@ -87,7 +87,7 @@ class HTTPServer_RequestHandler(BaseHTTPRequestHandler):
                     if self.repo.bare:
                         html = '<script>document.getElementById("editButton").classList.add("hidden")</script>' + html
                     template = template.replace("@HTML_HERE@", html)
-                    if config.get('Wiki', 'Stylesheet'):
+                    if config.has_option('Wiki', 'Stylesheet'):
                         template = template.replace("@STYLESHEETS@", '<link rel="stylesheet" type="text/css" href="%s" />' % config.get('Wiki', 'Stylesheet'))
                     else:
                         template = template.replace("@STYLESHEETS@", "")
