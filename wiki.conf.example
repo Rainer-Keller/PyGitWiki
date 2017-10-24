@@ -1,8 +1,11 @@
 [Wiki]
 Title = My Wiki
-Repository = /path/to/repository
 DefaultPage = index.md
 
 # You can get an example stylesheet from markdowncss.github.io
 Stylesheet = myStylesheet.css
 
+[Git]
+Repository = /path/to/repository
+User.Name = Wiki
+User.Email = wiki@localhost

@@ -20,7 +20,7 @@ class HTTPServer_RequestHandler(BaseHTTPRequestHandler):
 
     def initRepo(self):
         if not self.repo:
-            self.repo = git.Repo(config.get('Wiki', 'Repository'))
+            self.repo = git.Repo(config.get('Git', 'Repository'))
 
     def validatedPath(self):
         url = urlparse(self.path)
@@ -65,12 +65,13 @@ class HTTPServer_RequestHandler(BaseHTTPRequestHandler):
 
         try:
             if "textarea" in form:
-                os.makedirs(os.path.dirname(config.get('Wiki', 'Repository') + "/" + path), exist_ok=True)
-                with open(config.get('Wiki', 'Repository') + "/" + path, "wb") as f:
+                os.makedirs(os.path.dirname(config.get('Git', 'Repository') + "/" + path), exist_ok=True)
+                with open(config.get('Git', 'Repository') + "/" + path, "wb") as f:
                     f.write(form.getvalue('textarea').encode('utf8'))
 
             self.repo.index.add([path])
-            self.repo.index.commit("Commit message", author=git.Actor("Author name", "author@example.com"), committer=git.Actor("Committer name", "committer@example.com"))
+            gitUser = git.Actor(config.get("Git", "User.Name", fallback="Wiki"), config.get("Git", "User.Email", fallback="wiki@localhost"))
+            self.repo.index.commit("Commit message", author=gitUser, committer=gitUser)
         except Exception as e:
             print(e)
             self.send_response(403)
@@ -153,7 +154,7 @@ class HTTPServer_RequestHandler(BaseHTTPRequestHandler):
 config = configparser.ConfigParser()
 config.read('wiki.conf')
 
-repo = config.get('Wiki', 'Repository')
+repo = config.get('Git', 'Repository')
 assert(os.path.exists(repo))
 print("Using repository at", repo)
 
