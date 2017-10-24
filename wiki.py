@@ -63,12 +63,19 @@ class HTTPServer_RequestHandler(BaseHTTPRequestHandler):
                          'CONTENT_TYPE':self.headers['Content-Type'],
                      })
 
-        if "textarea" in form:
-            with open(config.get('Wiki', 'Repository') + "/" + path, "wb") as f:
-                f.write(form.getvalue('textarea').encode('utf8'))
+        try:
+            if "textarea" in form:
+                os.makedirs(os.path.dirname(config.get('Wiki', 'Repository') + "/" + path), exist_ok=True)
+                with open(config.get('Wiki', 'Repository') + "/" + path, "wb") as f:
+                    f.write(form.getvalue('textarea').encode('utf8'))
 
-        self.repo.index.add([path])
-        self.repo.index.commit("Commit message", author=git.Actor("Author name", "author@example.com"), committer=git.Actor("Committer name", "committer@example.com"))
+            self.repo.index.add([path])
+            self.repo.index.commit("Commit message", author=git.Actor("Author name", "author@example.com"), committer=git.Actor("Committer name", "committer@example.com"))
+        except Exception as e:
+            print(e)
+            self.send_response(403)
+            self.end_headers()
+            return
 
         self.do_GET()
         return
@@ -77,38 +84,37 @@ class HTTPServer_RequestHandler(BaseHTTPRequestHandler):
         self.initRepo()
         template = None
         output = None
-        stylesheets = ""
+        replacements = {}
 
         url, path = self.validatedPath()
+        contentType, encoding = mimetypes.guess_type(path)
 
         try:
             output = self.getContentsFromGit(path)
         except Exception as e:
-            template = "create"
-            print(e)
-
-        contentType, encoding = mimetypes.guess_type(path)
-
-        if contentType and template == "create":
-            self.send_response(404)
-            self.end_headers()
-            return
-
-        if not template:
-            if url.query == "edit":
-                template = "edit"
-            elif url.query.startswith("search="):
-                template = "search"
+            if contentType:
+                self.send_response(404)
+                self.end_headers()
+                return
             else:
-                template = "view"
+                template = "notfound"
+
+        replacements["edit_link"] = url.path + "?edit"
+        replacements["save_link"] = url.path
+        replacements["title"] = config.get('Wiki', 'Title', fallback="<no title>")
 
         if not contentType:
             content = None
             contentType == 'text/html'
 
-            if template == 'edit':
+            if template == "notfound" and url.query == "create":
+                template = "edit"
+                content = ''
+            elif url.query == "edit":
+                template = "edit"
                 content = output.decode('utf8')
-            elif template == "search":
+            elif url.query.startswith("search="):
+                template = "search"
                 content = ''
                 results = self.searchRepo(url.query[7:])
                 if len(results):
@@ -118,21 +124,24 @@ class HTTPServer_RequestHandler(BaseHTTPRequestHandler):
 
                 for i in results:
                     content = content + ('<div><a href="%s"/>%s</a><div>%s</div></div>' % (i['filename'], i['filename'], i['text']))
+            elif template == "notfound":
+                    content = "This page does not exist"
+                    replacements["edit_link"] = url.path + "?create"
             else:
+                template = 'view'
                 content = self.renderHTML(output)
 
             if self.repo.bare:
-                stylesheets = stylesheets + "<style>.edit { display:none; }</style>"
+                replacements['stylesheets'] = replacements.get('stylesheets', '') + "<style>.edit { display:none; }</style>"
             if config.has_option('Wiki', 'Stylesheet'):
-                stylesheets = stylesheets + ('<link rel="stylesheet" type="text/css" href="%s" />' % config.get('Wiki', 'Stylesheet'))
+                replacements['stylesheets'] = replacements.get('stylesheets', '') + ('<link rel="stylesheet" type="text/css" href="%s" />' % config.get('Wiki', 'Stylesheet'))
 
             with open(template + ".html" , 'r') as f:
                 output = f.read()
-            output = output.replace("@EDIT_LINK@", url.path + "?edit")
-            output = output.replace("@SAVE_LINK@", url.path)
-            output = output.replace("@CONTENT@", content)
-            output = output.replace("@TITLE@", config.get('Wiki', 'Title', fallback="<no title>"))
-            output = output.replace("@STYLESHEETS@", stylesheets)
+
+            replacements['content'] = content
+            for i in replacements:
+                output = output.replace("@" + i.upper() + "@", replacements[i])
             output = output.encode('utf8')
 
         self.send_response(200)
