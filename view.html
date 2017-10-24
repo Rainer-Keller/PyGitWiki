@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    @STYLESHEETS@
+  </head>
+  <body>
+    <div style="border: 1px solid gray">
+      <h1>@TITLE@</h1>
+      <a class="edit" href="@EDIT_LINK@">Edit</a>
+      <form action="/" method="get">
+        <input type="text" placeholder="Search" name="search"/>
+      </form>
+    </div>
+    <div id="content">
+      @CONTENT@
+    </div>
+  </body>
+</html>
