@@ -6,6 +6,7 @@ import git
 import mimetypes
 import configparser
 import os
+import json
 from urllib.parse import urlparse
 
 class HTTPServer_RequestHandler(BaseHTTPRequestHandler):
@@ -32,8 +33,15 @@ class HTTPServer_RequestHandler(BaseHTTPRequestHandler):
 
     def searchRepo(self, expression):
         result = []
+        gitOutput = []
         self.initRepo()
-        for line in self.repo.git.grep([expression, 'HEAD']).split('\n'):
+
+        try:
+            gitOutput = self.repo.git.grep(['-i', '--', expression, 'HEAD']).split('\n')
+        except:
+            pass
+
+        for line in gitOutput:
             line = line[line.find(':')+1:] # strip HEAD:
             filename = line[:line.find(':')]
             text = line[line.find(':')+1:]
@@ -78,6 +86,10 @@ class HTTPServer_RequestHandler(BaseHTTPRequestHandler):
         if not contentType:
             if url.query == 'raw':
                 contentType = 'text/plain'
+            elif url.query.startswith('search='):
+                result = self.searchRepo(url.query[7:])
+                contentType = 'application/json'
+                text = json.dumps(result).encode('utf8')
             else:
                 contentType == 'text/html'
                 with open('wiki.html', 'r') as f:

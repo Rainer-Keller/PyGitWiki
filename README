@@ -8,6 +8,10 @@ by browser.
 The main purpose is for personal use on your local machine. The code
 is *NOT* secured against all kinds of attacks. **Do not use it on public servers.**
 
+### Features
+
+  * Search
+
 ### Setup
 
 1. Install the python packages
