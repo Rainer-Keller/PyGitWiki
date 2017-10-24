@@ -1,0 +1,14 @@
+[Unit]
+Description=PyGitWiki Service
+After=syslog.target network.target
+
+[Service]
+WorkingDirectory=/path/to/git/repo/PyGitWiki
+ExecStart=/path/to/virtualenv/bin/python /path/to/git/repo/PyGitWiki/wiki.py
+Restart=always
+PrivateTmp=true
+NoNewPrivileges=true
+
+[Install]
+WantedBy=default.target
+

@@ -13,7 +13,7 @@ is *NOT* secured against all kinds of attacks. **Do not use it on public servers
   * Search
   * without JavaScript
 
-### Setup
+### Manual Start
 
 1. Install the python packages
 
@@ -29,3 +29,11 @@ is *NOT* secured against all kinds of attacks. **Do not use it on public servers
 
   `./wiki.py`
 
+### Run as Service
+
+In order to start the wiki as a service copy the file misc/pygitwiki.service
+to ~/.config/systemd/user/ and modity it to match your setup.
+You can start or enable the wiki via systemd commands:
+
+    systemctl --user enable pygitwiki
+    systemctl --user start pygitwiki
