@@ -2,7 +2,7 @@
 Title = My Wiki
 DefaultPage = index.md
 
-# You can get an example stylesheet from markdowncss.github.io
+# You can use the example stylesheet in misc/stylesheet.css
 Stylesheet = myStylesheet.css
 
 [Git]
