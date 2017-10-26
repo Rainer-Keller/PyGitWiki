@@ -64,10 +64,13 @@ class HTTPServer_RequestHandler(BaseHTTPRequestHandler):
                      })
 
         try:
+            filecontent = b''
             if "textarea" in form:
-                os.makedirs(os.path.dirname(config.get('Git', 'Repository') + "/" + path), exist_ok=True)
-                with open(config.get('Git', 'Repository') + "/" + path, "wb") as f:
-                    f.write(form.getvalue('textarea').encode('utf8'))
+                filecontent = form.getvalue('textarea').encode('utf8')
+
+            os.makedirs(os.path.dirname(config.get('Git', 'Repository') + "/" + path), exist_ok=True)
+            with open(config.get('Git', 'Repository') + "/" + path, "wb") as f:
+                f.write(filecontent)
 
             self.repo.index.add([path])
             gitUser = git.Actor(config.get("Git", "User.Name", fallback="Wiki"), config.get("Git", "User.Email", fallback="wiki@localhost"))
