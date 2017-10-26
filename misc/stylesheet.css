@@ -68,3 +68,25 @@ blockquote {
   padding: 1rem;
 }
 
+div.header {
+    border: 1px solid darkgray;
+}
+
+div.header h1 {
+    margin: 0px;
+}
+
+div.header a, input[type=text], button[type=submit] {
+  margin: 2px;
+}
+
+div.header a, div.header button[type=submit] {
+    border: 1px solid darkgray;
+    border-radius: 3px;
+    padding: 3px;
+    background: #54b8fb;
+    color: black;
+    float: left;
+    font-size: 18px;
+}
+

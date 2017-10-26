@@ -6,14 +6,13 @@
     @STYLESHEETS@
   </head>
   <body>
-    <div class="header" style="border: 1px solid gray">
+    <form action="@SAVE_LINK@" method="post">
+    <div class="header">
       <h1>@TITLE@</h1>
-    </div>
-      <form action="@SAVE_LINK@" method="post">
       <button type="submit">Save</button>
       <input type="text" name="commitMessage" placeholder="Commit message"/>
-      <textarea style="width:100%;height:500px" name="textarea">@CONTENT@</textarea>
-      </form>
     </div>
+    <textarea style="width:100%;height:500px" name="textarea">@CONTENT@</textarea>
+    </form>
   </body>
 </html>
