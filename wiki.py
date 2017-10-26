@@ -138,7 +138,7 @@ class HTTPServer_RequestHandler(BaseHTTPRequestHandler):
             if self.repo.bare:
                 replacements['stylesheets'] = replacements.get('stylesheets', '') + "<style>.edit { display:none; }</style>"
             if config.has_option('Wiki', 'Stylesheet'):
-                replacements['stylesheets'] = replacements.get('stylesheets', '') + ('<link rel="stylesheet" type="text/css" href="%s" />' % config.get('Wiki', 'Stylesheet'))
+                replacements['stylesheets'] = replacements.get('stylesheets', '') + ('<link rel="stylesheet" type="text/css" href="/%s" />' % config.get('Wiki', 'Stylesheet'))
 
             with open(template + ".html" , 'rb') as f:
                 output = f.read()
