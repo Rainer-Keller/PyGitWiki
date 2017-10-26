@@ -140,13 +140,12 @@ class HTTPServer_RequestHandler(BaseHTTPRequestHandler):
             if config.has_option('Wiki', 'Stylesheet'):
                 replacements['stylesheets'] = replacements.get('stylesheets', '') + ('<link rel="stylesheet" type="text/css" href="%s" />' % config.get('Wiki', 'Stylesheet'))
 
-            with open(template + ".html" , 'r') as f:
+            with open(template + ".html" , 'rb') as f:
                 output = f.read()
 
             replacements['content'] = content
             for i in replacements:
-                output = output.replace("@" + i.upper() + "@", replacements[i])
-            output = output.encode('utf8')
+                output = output.replace(("@" + i.upper() + "@").encode('utf8'), replacements[i].encode('utf8'))
 
         self.send_response(200)
         self.send_header('Content-type', contentType)
