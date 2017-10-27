@@ -110,6 +110,11 @@ class HTTPServer_RequestHandler(BaseHTTPRequestHandler):
         replacements["save_link"] = url.path
         replacements["title"] = config.get('Wiki', 'Title', fallback="<no title>")
 
+        if url.query == "stylesheet":
+            contentType = 'text/css'
+            with open("misc/stylesheet.css", 'rb') as f:
+                output = f.read()
+
         if not contentType:
             content = None
             contentType == 'text/html'
@@ -140,8 +145,7 @@ class HTTPServer_RequestHandler(BaseHTTPRequestHandler):
 
             if self.repo.bare:
                 replacements['stylesheets'] = replacements.get('stylesheets', '') + "<style>.edit { display:none; }</style>"
-            if config.has_option('Wiki', 'Stylesheet'):
-                replacements['stylesheets'] = replacements.get('stylesheets', '') + ('<link rel="stylesheet" type="text/css" href="/%s" />' % config.get('Wiki', 'Stylesheet'))
+            replacements['stylesheets'] = replacements.get('stylesheets', '') + ('<link rel="stylesheet" type="text/css" href="/%s" />' % config.get('Wiki', 'Stylesheet', fallback="?stylesheet"))
 
             with open(template + ".html" , 'rb') as f:
                 output = f.read()

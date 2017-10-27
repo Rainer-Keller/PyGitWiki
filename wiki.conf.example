@@ -2,8 +2,8 @@
 Title = My Wiki
 DefaultPage = index.md
 
-# You can use the example stylesheet in misc/stylesheet.css
-Stylesheet = myStylesheet.css
+## To change the stylesheet set a path in your repository
+#Stylesheet = /path/to/custom/stylesheet
 
 [Git]
 Repository = /path/to/repository
