@@ -5,6 +5,8 @@ DefaultPage = index.md
 ## To change the stylesheet set a path in your repository
 #Stylesheet = /path/to/custom/stylesheet
 
+# Port = 8080
+
 [Git]
 Repository = /path/to/repository
 User.Name = Wiki

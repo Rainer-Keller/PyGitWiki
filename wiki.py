@@ -174,6 +174,6 @@ config.read('wiki.conf')
 repo = getRepositoryPath()
 print("Using repository at", repo)
 
-httpd = HTTPServer(('127.0.0.1', 8080), HTTPServer_RequestHandler)
-print('Running server...')
+httpd = HTTPServer(('127.0.0.1', int(config.get("Wiki", "Port", fallback=8080))), HTTPServer_RequestHandler)
+print('Running server on port', httpd.server_port)
 httpd.serve_forever()
