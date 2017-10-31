@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 from http.server import BaseHTTPRequestHandler, HTTPServer
+from optparse import OptionParser
 import markdown
 import git
 import mimetypes
@@ -14,6 +15,7 @@ def getRepositoryPath():
 
 class HTTPServer_RequestHandler(BaseHTTPRequestHandler):
     repo = None
+    dataDir = os.path.dirname(os.path.realpath(__file__))
 
     def getContentsFromGit(self, path):
         return self.repo.git.show("HEAD:" + path, stdout_as_string=False)
@@ -120,7 +122,7 @@ class HTTPServer_RequestHandler(BaseHTTPRequestHandler):
 
         if url.query == "stylesheet":
             contentType = 'text/css'
-            with open("misc/stylesheet.css", 'rb') as f:
+            with open(os.path.join(self.dataDir, "misc/stylesheet.css"), 'rb') as f:
                 output = f.read()
 
         if not contentType:
@@ -155,7 +157,7 @@ class HTTPServer_RequestHandler(BaseHTTPRequestHandler):
                 replacements['stylesheets'] = replacements.get('stylesheets', '') + "<style>.edit { display:none; }</style>"
             replacements['stylesheets'] = replacements.get('stylesheets', '') + ('<link rel="stylesheet" type="text/css" href="/%s" />' % config.get('Wiki', 'Stylesheet', fallback="?stylesheet"))
 
-            with open(template + ".html" , 'rb') as f:
+            with open(os.path.join(self.dataDir, template + ".html") , 'rb') as f:
                 output = f.read()
 
             replacements['content'] = content
@@ -170,6 +172,14 @@ class HTTPServer_RequestHandler(BaseHTTPRequestHandler):
 
 config = configparser.ConfigParser()
 config.read('wiki.conf')
+
+parser = OptionParser()
+parser.add_option("-d", "--dataDir", action="store", dest="dataDir")
+(options, args) = parser.parse_args()
+if options.dataDir:
+    if not os.path.exists(options.dataDir):
+        raise Exception("Datadir '" + options.dataDir + "' does not exist")
+    HTTPServer_RequestHandler.dataDir = options.dataDir
 
 print("Using repository at", getRepositoryPath())
 
