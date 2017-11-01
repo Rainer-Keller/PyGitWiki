@@ -9,6 +9,9 @@ import os
 import cgi
 from urllib.parse import urlparse
 
+def getRepositoryPath():
+    return os.path.expanduser(config.get('Git', 'Repository'))
+
 class HTTPServer_RequestHandler(BaseHTTPRequestHandler):
     repo = None
 
@@ -20,7 +23,7 @@ class HTTPServer_RequestHandler(BaseHTTPRequestHandler):
 
     def initRepo(self):
         if not self.repo:
-            gitrepo = config.get('Git', 'Repository')
+            gitrepo = getRepositoryPath()
             if not os.path.exists(gitrepo):
                self.repo = git.Repo.init(gitrepo)
             else:
@@ -72,8 +75,8 @@ class HTTPServer_RequestHandler(BaseHTTPRequestHandler):
             if "textarea" in form:
                 filecontent = form.getvalue('textarea').encode('utf8')
 
-            os.makedirs(os.path.dirname(config.get('Git', 'Repository') + "/" + path), exist_ok=True)
-            with open(config.get('Git', 'Repository') + "/" + path, "wb") as f:
+            os.makedirs(os.path.dirname(getRepositoryPath() + "/" + path), exist_ok=True)
+            with open(getRepositoryPath() + "/" + path, "wb") as f:
                 f.write(filecontent)
 
             self.repo.index.add([path])
@@ -167,7 +170,7 @@ class HTTPServer_RequestHandler(BaseHTTPRequestHandler):
 config = configparser.ConfigParser()
 config.read('wiki.conf')
 
-repo = config.get('Git', 'Repository')
+repo = getRepositoryPath()
 print("Using repository at", repo)
 
 httpd = HTTPServer(('127.0.0.1', 8080), HTTPServer_RequestHandler)
