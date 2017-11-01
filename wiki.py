@@ -75,8 +75,9 @@ class HTTPServer_RequestHandler(BaseHTTPRequestHandler):
             if "textarea" in form:
                 filecontent = form.getvalue('textarea').encode('utf8')
 
-            os.makedirs(os.path.dirname(getRepositoryPath() + "/" + path), exist_ok=True)
-            with open(getRepositoryPath() + "/" + path, "wb") as f:
+            newFilePath = os.path.join(getRepositoryPath(), path)
+            os.makedirs(os.path.dirname(newFilePath), exist_ok=True)
+            with open(newFilePath, "wb") as f:
                 f.write(filecontent)
 
             self.repo.index.add([path])
