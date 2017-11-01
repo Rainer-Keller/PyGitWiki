@@ -20,7 +20,11 @@ class HTTPServer_RequestHandler(BaseHTTPRequestHandler):
 
     def initRepo(self):
         if not self.repo:
-            self.repo = git.Repo(config.get('Git', 'Repository'))
+            gitrepo = config.get('Git', 'Repository')
+            if not os.path.exists(gitrepo):
+               self.repo = git.Repo.init(gitrepo)
+            else:
+               self.repo = git.Repo(gitrepo)
 
     def validatedPath(self):
         url = urlparse(self.path)
@@ -164,7 +168,6 @@ config = configparser.ConfigParser()
 config.read('wiki.conf')
 
 repo = config.get('Git', 'Repository')
-assert(os.path.exists(repo))
 print("Using repository at", repo)
 
 httpd = HTTPServer(('127.0.0.1', 8080), HTTPServer_RequestHandler)
