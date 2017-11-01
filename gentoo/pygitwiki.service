@@ -1,0 +1,14 @@
+[Unit]
+Description=PyGitWiki Service
+After=syslog.target network.target
+
+[Service]
+WorkingDirectory=~
+ExecStart= /usr/bin/pygitwiki --dataDir=/usr/share/pygitwiki
+Restart=always
+PrivateTmp=true
+NoNewPrivileges=true
+
+[Install]
+WantedBy=default.target
+
