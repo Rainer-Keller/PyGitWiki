@@ -171,8 +171,7 @@ class HTTPServer_RequestHandler(BaseHTTPRequestHandler):
 config = configparser.ConfigParser()
 config.read('wiki.conf')
 
-repo = getRepositoryPath()
-print("Using repository at", repo)
+print("Using repository at", getRepositoryPath())
 
 httpd = HTTPServer(('127.0.0.1', int(config.get("Wiki", "Port", fallback=8080))), HTTPServer_RequestHandler)
 print('Running server on port', httpd.server_port)
