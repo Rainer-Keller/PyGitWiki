@@ -13,21 +13,21 @@ is *NOT* secured against all kinds of attacks. **Do not use it on public servers
   * Search
   * without JavaScript
 
-### Manual Start
+### First Start
 
 1. Install the python packages
 
   * GitPython
   * Markdown
 
-2. Create a git repostitory for storing your content.
-
-3. Create file `wiki.conf` based on `wiki.conf.example` by setting a title and
-   path to the repository to use.
-
-4. Start the server
+2. Start the Wiki
 
   `./wiki.py`
+
+  A configuration file and Git repository will be created in `~/.pygitwigi`.
+  The wiki is now ready for use.
+
+  For customisation check the configuration file `~/.pygitwigi/wiki.conf`
 
 ### Run as Service
 
