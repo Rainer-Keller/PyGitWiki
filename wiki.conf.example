@@ -6,6 +6,7 @@ DefaultPage = index.md
 #Stylesheet = /path/to/custom/stylesheet
 
 # Port = 8080
+# DataDir = /path/to/htmlfiles
 
 [Git]
 Repository = /path/to/repository

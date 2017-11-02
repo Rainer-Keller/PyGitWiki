@@ -173,6 +173,9 @@ class HTTPServer_RequestHandler(BaseHTTPRequestHandler):
 config = configparser.ConfigParser()
 config.read('wiki.conf')
 
+if config.has_option('Wiki', 'DataDir'):
+    HTTPServer_RequestHandler.dataDir = config.get('Wiki', 'DataDir')
+
 parser = OptionParser()
 parser.add_option("-d", "--dataDir", action="store", dest="dataDir")
 (options, args) = parser.parse_args()
