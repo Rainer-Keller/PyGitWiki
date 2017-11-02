@@ -170,22 +170,49 @@ class HTTPServer_RequestHandler(BaseHTTPRequestHandler):
         self.wfile.write(output)
         return
 
+dataDir = os.path.dirname(os.path.realpath(__file__))
 config = configparser.ConfigParser()
-config.read('wiki.conf')
-
-if config.has_option('Wiki', 'DataDir'):
-    HTTPServer_RequestHandler.dataDir = config.get('Wiki', 'DataDir')
 
 parser = OptionParser()
 parser.add_option("-d", "--dataDir", action="store", dest="dataDir")
+parser.add_option("-c", "--config", action="store", dest="config")
 (options, args) = parser.parse_args()
+if options.config:
+    if not os.path.exists(options.config):
+        raise Exception("Config '" + options.config + "' does not exist")
+    print("Load configuration", options.config)
+    config.read(options.config)
+else:
+    print("Load configuration", os.path.join(dataDir, 'wiki.systemconf'))
+    config.read(os.path.join(dataDir, 'wiki.systemconf'))
+
+userConfig = os.path.expanduser(config.get('System', 'userConfig'))
+defaultRepositoryPath = config.get('System', 'DefaultRepositoryPath')
+if userConfig and not os.path.exists(userConfig):
+    print("Starting new wiki...")
+    os.makedirs(os.path.dirname(userConfig), exist_ok=True)
+    with open(os.path.join(dataDir, 'wiki.conf.example')) as f:
+        content = f.read()
+    content = content.replace('Repository = /path/to/repository', "Repository = " + defaultRepositoryPath)
+    with open(userConfig, 'w') as f:
+        f.write(content)
+
+print("Load configuration", userConfig)
+config.read(userConfig)
+
+if config.has_option('Wiki', 'DataDir'):
+    dataDir = config.get('Wiki', 'DataDir')
+
 if options.dataDir:
     if not os.path.exists(options.dataDir):
         raise Exception("Datadir '" + options.dataDir + "' does not exist")
-    HTTPServer_RequestHandler.dataDir = options.dataDir
+    dataDir = options.dataDir
+
+HTTPServer_RequestHandler.dataDir = dataDir
 
 print("Using repository at", getRepositoryPath())
 
 httpd = HTTPServer(('127.0.0.1', int(config.get("Wiki", "Port", fallback=8080))), HTTPServer_RequestHandler)
 print('Running server on port', httpd.server_port)
 httpd.serve_forever()
+
