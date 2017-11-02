@@ -207,9 +207,10 @@ if config.has_option('Wiki', 'DataDir'):
     dataDir = config.get('Wiki', 'DataDir')
 
 if options.dataDir:
-    if not os.path.exists(options.dataDir):
-        raise Exception("Datadir '" + options.dataDir + "' does not exist")
     dataDir = options.dataDir
+
+if not os.path.exists(dataDir):
+    raise Exception("Datadir '" + dataDir + "' does not exist")
 
 HTTPServer_RequestHandler.dataDir = dataDir
 
