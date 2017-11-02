@@ -122,7 +122,7 @@ class HTTPServer_RequestHandler(BaseHTTPRequestHandler):
 
         if url.query == "stylesheet":
             contentType = 'text/css'
-            with open(os.path.join(self.dataDir, "misc/stylesheet.css"), 'rb') as f:
+            with open(os.path.join(self.dataDir, "stylesheet.css"), 'rb') as f:
                 output = f.read()
 
         if not contentType:
