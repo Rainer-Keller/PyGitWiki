@@ -6,7 +6,7 @@ inherit python-single-r1 systemd
 
 DESCRIPTION="A lightweight Wiki using a Git storage backend for personal use"
 HOMEPAGE="https://github.com/Rainer-Keller/PyGitWiki"
-SRC_URI="https://github.com/Rainer-Keller/PyGitWiki/archive/${P}.tar.gz"
+SRC_URI="https://github.com/Rainer-Keller/PyGitWiki/archive/v${P}.tar.gz"
 LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
