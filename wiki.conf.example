@@ -1,9 +1,9 @@
 [Wiki]
 Title = My Wiki
-DefaultPage = index.md
+# DefaultPage = index.md
 
 ## To change the stylesheet set a path in your repository
-#Stylesheet = /path/to/custom/stylesheet
+# Stylesheet = /path/to/custom/stylesheet
 
 # Port = 8080
 # DataDir = /path/to/htmlfiles
