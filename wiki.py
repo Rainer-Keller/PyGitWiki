@@ -186,14 +186,17 @@ else:
     print("Load configuration", os.path.join(dataDir, 'wiki.systemconf'))
     config.read(os.path.join(dataDir, 'wiki.systemconf'))
 
-userConfig = os.path.expanduser(config.get('System', 'userConfig'))
-defaultRepositoryPath = config.get('System', 'DefaultRepositoryPath')
+userConfig = os.path.expanduser(config.get('System', 'userConfig', fallback=options.config))
+
+if config.has_option('System', 'DataDir'):
+    dataDir = config.get('System', 'DataDir')
+
 if userConfig and not os.path.exists(userConfig):
     print("Starting new wiki...")
     os.makedirs(os.path.dirname(userConfig), exist_ok=True)
     with open(os.path.join(dataDir, 'wiki.conf.example')) as f:
         content = f.read()
-    content = content.replace('Repository = /path/to/repository', "Repository = " + defaultRepositoryPath)
+    content = content.replace('Repository = /path/to/repository', "Repository = " + config.get('System', 'DefaultRepositoryPath'))
     with open(userConfig, 'w') as f:
         f.write(content)
 
