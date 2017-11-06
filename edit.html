@@ -11,7 +11,83 @@
       <h1>@TITLE@</h1>
       <button type="submit">Save</button>
     </div>
-    <textarea style="width:100%;height:500px" name="textarea">@CONTENT@</textarea>
+    <div style="clear:both"></div>
+    <div style="width:70%; float:left">
+      <textarea style="width:100%;height:600px" name="textarea">@CONTENT@</textarea>
+    </div>
+    <div style="margin-left: 71%;font-size:0.7em;overflow-y:scroll;height:600px"><h3 style="margin:0px;padding:0px">Markdown Syntax</h3>
+      <b>Headers</b>
+<pre>
+First Level Header
+====================
+
+Second Level Header
+---------------------
+
+# First Level Header
+## Second Level Header
+### Third Level Header
+#### Fourth Level Header
+##### Fifth Level Header
+###### Sixth Level Header
+</pre>
+<b>Styles</b>
+<pre>
+*italic*
+_italic_
+
+**bold**
+__bold__
+
+&gt; This is a blockquote.
+</pre>
+<b>Lists</b>
+<pre>
++ item
+  + sub item
+* item
+- item
+1. item
+
+* A list item
+
+  With multiple paragraphs
+</pre>
+<b>Links</b>
+<pre>
+This is an [example link](http://example.com/)
+This is an [example link](http://example.com/ "With a Title")
+This ia a reference style link [Text][id]
+
+[id]: http://example.com/        "Title"
+</pre>
+<b>Images</b>
+<pre>
+![alt text](/path/to/img.jpg "Title")
+
+![alt text][id]
+[id]: /path/to/img.jpg "Title"
+</pre>
+<b>Code</b>
+<pre>
+`inline code`
+
+    code block
+    more code
+</pre>
+<b>Tables</b>
+<pre>
+| Header 1 | Header 2    | Header 3 |
+|----------|------------:|:--------:|
+| Row 1    |rigth-aligned| centered |
+</pre>
+<b>Misc</b>
+<pre>
+[TOC] will add a table of contents
+</pre>
+    </div>
+    </div>
+    <div style="clear:both"></div>
     <input type="text" name="commitMessage" placeholder="Commit message (optional)"/>
     <button type="submit">Save</button>
     </form>
