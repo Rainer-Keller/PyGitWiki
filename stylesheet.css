@@ -80,7 +80,7 @@ div.header a, input[type=text], button[type=submit] {
   margin: 2px;
 }
 
-div.header a, div.header button[type=submit] {
+div.header a, button[type=submit] {
     border: 1px solid darkgray;
     border-radius: 3px;
     padding: 3px;
