@@ -18,6 +18,7 @@ class HTTPServer_RequestHandler(BaseHTTPRequestHandler):
     dataDir = os.path.dirname(os.path.realpath(__file__))
     markdown = markdown.Markdown(extensions = ['markdown.extensions.tables',
                                                'markdown.extensions.toc',
+                                               'markdown.extensions.meta',
                                               ])
 
     def getContentsFromGit(self, path):
@@ -156,6 +157,9 @@ class HTTPServer_RequestHandler(BaseHTTPRequestHandler):
             else:
                 template = 'view'
                 content = self.renderHTML(output)
+                if 'title' in self.markdown.Meta:
+                    replacements['title'] = self.markdown.Meta['title'][0]
+                    replacements['page_title'] = replacements['title'] + ' - ' + replacements['page_title']
 
             if self.repo.bare:
                 replacements['stylesheets'] = replacements.get('stylesheets', '') + "<style>.edit { display:none; }</style>"
