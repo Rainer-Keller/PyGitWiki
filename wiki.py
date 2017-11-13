@@ -122,6 +122,7 @@ class HTTPServer_RequestHandler(BaseHTTPRequestHandler):
         replacements["edit_link"] = url.path + "?edit"
         replacements["save_link"] = url.path
         replacements["title"] = config.get('Wiki', 'Title', fallback="<no title>")
+        replacements["page_title"] = replacements["title"]
 
         if url.query == "stylesheet":
             contentType = 'text/css'
