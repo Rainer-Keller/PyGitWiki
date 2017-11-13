@@ -16,12 +16,15 @@ def getRepositoryPath():
 class HTTPServer_RequestHandler(BaseHTTPRequestHandler):
     repo = None
     dataDir = os.path.dirname(os.path.realpath(__file__))
+    markdown = markdown.Markdown(extensions = ['markdown.extensions.tables',
+                                               'markdown.extensions.toc',
+                                              ])
 
     def getContentsFromGit(self, path):
         return self.repo.git.show("HEAD:" + path, stdout_as_string=False)
 
     def renderHTML(self, contents):
-        return markdown.markdown(contents.decode('utf8'), extensions=['markdown.extensions.tables', 'markdown.extensions.toc'])
+        return self.markdown.convert(contents.decode('utf8'))
 
     def initRepo(self):
         if not self.repo:
