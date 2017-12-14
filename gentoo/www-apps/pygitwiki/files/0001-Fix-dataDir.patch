@@ -1,0 +1,25 @@
+diff --git a/PyGitWiki-0.1/wiki.py.orig b/PyGitWiki-0.1/wiki.py
+index 2e8c364..3a64041 100755
+--- a/PyGitWiki-0.1/wiki.py.orig
++++ b/PyGitWiki-0.1/wiki.py
+@@ -188,7 +188,9 @@ else:
+ 
+ userConfig = os.path.expanduser(config.get('System', 'userConfig', fallback=options.config))
+ 
+-if config.has_option('System', 'DataDir'):
++if options.dataDir:
++    dataDir = options.dataDir
++elif config.has_option('System', 'DataDir'):
+     dataDir = config.get('System', 'DataDir')
+ 
+ if userConfig and not os.path.exists(userConfig):
+@@ -206,9 +208,6 @@ config.read(userConfig)
+ if config.has_option('Wiki', 'DataDir'):
+     dataDir = config.get('Wiki', 'DataDir')
+ 
+-if options.dataDir:
+-    dataDir = options.dataDir
+-
+ if not os.path.exists(dataDir):
+     raise Exception("Datadir '" + dataDir + "' does not exist")
+ 

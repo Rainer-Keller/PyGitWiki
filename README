@@ -29,6 +29,11 @@ is *NOT* secured against all kinds of attacks. **Do not use it on public servers
 
   For customisation check the configuration file `~/.pygitwigi/wiki.conf`
 
+### Quick install on Gentoo
+
+  ebuild ./gentoo/www-apps/pygitwiki/pygitwiki-0.1.ebuild digest
+  ebuild ./gentoo/www-apps/pygitwiki/pygitwiki-0.1.ebuild merge
+
 ### Run as Service
 
 In order to start the wiki as a service copy the file misc/pygitwiki.service
