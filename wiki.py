@@ -113,12 +113,10 @@ class HTTPServer_RequestHandler(BaseHTTPRequestHandler):
         try:
             output = self.getContentsFromGit(path)
         except Exception as e:
-            if contentType:
-                self.send_response(404)
-                self.end_headers()
-                return
-            else:
-                template = "notfound"
+            print(e)
+            # Consider all failed git commands as 'not found'
+            template = "notfound"
+            encoding = contentType = None
 
         replacements["edit_link"] = url.path + "?edit"
         replacements["save_link"] = url.path
