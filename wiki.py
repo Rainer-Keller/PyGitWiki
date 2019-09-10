@@ -130,7 +130,7 @@ class HTTPServer_RequestHandler(BaseHTTPRequestHandler):
 
         if not contentType:
             content = None
-            contentType == 'text/html'
+            contentType = 'text/html'
 
             if template == "notfound" and url.query == "create":
                 template = "edit"
