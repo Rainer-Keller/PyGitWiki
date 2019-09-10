@@ -128,7 +128,8 @@ class HTTPServer_RequestHandler(BaseHTTPRequestHandler):
             with open(os.path.join(self.dataDir, "stylesheet.css"), 'rb') as f:
                 output = f.read()
 
-        if not contentType:
+        if not contentType or contentType == 'text/markdown':
+            # Mimetype text/markdown has to be converted to text/html
             content = None
             contentType = 'text/html'
 
