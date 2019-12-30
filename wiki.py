@@ -19,6 +19,7 @@ class HTTPServer_RequestHandler(BaseHTTPRequestHandler):
     markdown = markdown.Markdown(extensions = ['markdown.extensions.tables',
                                                'markdown.extensions.toc',
                                                'markdown.extensions.meta',
+                                               'markdown.extensions.sane_lists',
                                               ])
 
     def getContentsFromGit(self, path):
