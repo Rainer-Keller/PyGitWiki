@@ -61,6 +61,12 @@ class HTTPServer_RequestHandler(BaseHTTPRequestHandler):
             line = line[line.find(':')+1:] # strip HEAD:
             filename = line[:line.find(':')]
             text = line[line.find(':')+1:]
+            if len(text) > 100:
+                try:
+                    index = text.index(expression)
+                except ValueError:
+                    index = 0
+                text = ('…' if index > 0 else '') + text[max(0, index-50):min(len(text),index+50)] + '…'
             result.append({'filename': filename, 'text': text})
         return result
 
