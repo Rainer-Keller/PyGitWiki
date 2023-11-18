@@ -8,6 +8,8 @@ import mimetypes
 import configparser
 import os
 import cgi
+import urllib
+import html
 from urllib.parse import urlparse
 
 def getRepositoryPath():
@@ -143,11 +145,12 @@ class HTTPServer_RequestHandler(BaseHTTPRequestHandler):
             elif url.query.startswith("search="):
                 template = "search"
                 content = ''
-                results = self.searchRepo(url.query[7:])
+                query = urllib.parse.unquote(url.query[7:])
+                results = self.searchRepo(query)
                 if len(results):
-                    content = content + "Search results for: " + url.query[7:]
+                    content = content + "Search results for: " + html.escape(query)
                 else:
-                    content = content + "No results for: " + url.query[7:]
+                    content = content + "No results for: " + html.escape(query)
 
                 for i in results:
                     content = content + ('<div><a href="%s"/>%s</a><div>%s</div></div>' % (i['filename'], i['filename'], i['text']))
